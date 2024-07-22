@@ -1,25 +1,15 @@
 name: Build docker container
-# on:
-#   push:
-#     tags:
-#       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 on:
-  workflow_dispatch:
-  # push:
-  #   branches:
-  #     - 'master'
-  #   tags:
-  #     - 'v*'
-  # pull_request:
-  #   branches:
-  #     - 'master'
+  push:
+    branches:
+      - 'next'
 
 env:
   SKIP_ENV_VALIDATION: true
 
 jobs:
-  build:
+  docker_build:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +20,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/complexdatacollective/fresco
+          images: ghcr.io/mrkarimoff/fresco-instance
+          tags: |
+            type=sha,prefix=next-${{ github.sha }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
